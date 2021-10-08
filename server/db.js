@@ -4,12 +4,13 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config.env' });
 const DB_URI = process.env.DATABASE
 
-const DB = () => {
-    mongoose.connect(DB_URI).then(() => {
+const DB = async () => {
+    try {
+        await mongoose.connect(DB_URI);
         console.log("DataBase Connection Successful")
-    }).catch((err) => {
+    } catch (err) {
         console.error(err);
-    })
+    }
 }
 
 module.exports = DB
