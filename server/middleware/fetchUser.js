@@ -7,7 +7,7 @@ const fetchUser = (req, res, next) => {
         req.user = data.user;
         next();
     } catch (err) {
-        res.status(400).send({error : "Please Authenticate with valid jwt token", err})
+        res.status(400).send({error : "Please Authenticate with valid jwt token"})
     }
 }
 
