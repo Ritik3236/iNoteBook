@@ -1,12 +1,16 @@
-import mongoose from 'mongoose';
+const mongoose =  require('mongoose');
 const { Schema } = mongoose;
 
 const notesSchema = new Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     title: {
         type: String,
         required: true,
     },
-    desciption: {
+    description: {
         type: String,
         required: true,
     },
