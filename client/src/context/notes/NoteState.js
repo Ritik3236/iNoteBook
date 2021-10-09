@@ -1,9 +1,5 @@
-// import NoteContext from './NoteContext';
+import NoteContext from './noteContext';
 import { useState } from 'react'
-import { createContext } from 'react';
-// import NoteState from './NoteState'
-
-const NoteContext = createContext();
 
 const NoteState = (props) => {
     const notesInitial = [
@@ -35,4 +31,4 @@ const NoteState = (props) => {
     )
 }
 
-export default NoteState
+export default NoteState;
