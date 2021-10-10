@@ -34,7 +34,7 @@ router.get('/fetchallnotes', fetchUser, async (req, res) => {
 
     try {
         allNotes = await Notes.find({ user_id: req.user.id });
-        res.status(200).send({ AllNotes: allNotes });
+        res.status(200).send({ allNotes });
     } catch (err) {
         console.log(err)
         res.status(500).send({ error: 'Internal Error Occurred' })
@@ -69,13 +69,14 @@ router.put('/updatenote/:id', fetchUser,
             if (note.user_id.toString() !== req.user.id) { return res.status(401).send("Not Allowed"); }
 
             note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
-            res.status(204).send(note)
+            res.status(201).send(note);
 
         } catch (err) {
             console.log(err)
             res.status(500).send({ error: 'Internal Error Occurred' })
         }
     })
+    
 //! ROUTE 4 :
 // ? Delete Notes  using DELETE :  api/notes/deleteNote, login Required.
 router.delete('/deletenote/:id', fetchUser, async (req, res) => {

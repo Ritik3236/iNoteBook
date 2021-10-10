@@ -1,10 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import NoteContext from '../context/notes/noteContext';
 import NoteItem from './NoteItem';
 
 const Notes = () => {
-    // eslint-disable-next-line
-    const { notes, setNotes } = useContext(NoteContext);
+    const { notes, fetchAllNotes } = useContext(NoteContext);
+    useEffect(() => {
+        fetchAllNotes()
+    }, [])
     return (
         <>
             <div className="my-3 container">
