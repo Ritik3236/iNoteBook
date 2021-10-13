@@ -4,10 +4,9 @@ import { useState } from 'react'
 const NoteState = (props) => {
     const host = "http://localhost:5000";
     const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE2MDJjYTkzMzQzMmUxNTBlYjE0Yjg0In0sImlhdCI6MTYzMzY5Mjg2Mn0.quWsLMG8zcdWNFLPePuHMt2cQ_OLSieyCWf0PoVxXXA';
-
     const [notes, setNotes] = useState([]);
 
-    // * * * Fetching all notes
+    // * * * Fetching all notes [Done]
     const fetchAllNotes = async () => {
         const response = await fetch(`${host}/api/notes/fetchallnotes`, {
             method: "GET",
@@ -15,12 +14,11 @@ const NoteState = (props) => {
         })
         const noteData = await response.json()
         setNotes(noteData.allNotes)
-
     }
 
-    // * * * Add a Note
+    // * * * Add a Note [Done]
     const addNote = async (title, description, tag) => {
-
+        if (tag ==='') {tag = 'default'};
         const response = await fetch(`${host}/api/notes/addnote`, {
             method: "POST",
             headers: {
@@ -29,36 +27,41 @@ const NoteState = (props) => {
             },
             body: JSON.stringify({ title, description, tag })
         });
-        console.log(response)
-
-        const note = {
-            // TODO : API CALL
-            "_id": "616055bfcf12ab0ead0aa2a3b",
-            "user_id": "61602ca933432e150eb14b84",
-            "title": title,
-            "description": description,
-            "tag": tag,
-            "date": Date.now(),
-        }
-        setNotes(notes.concat(note))
+        const note = await response.json()
+        console.log(note)
+        setNotes(notes.concat(note.newNote))
     }
 
     // * * * Edit a Note
-    const editNote = async (id, title, description, tag) => {
+    const editNote = async (note) => {
 
-        // Edit : 'Api Call'
-        const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+         // Update : 'API CALL'
+        let { _id, description, tag, title, } = note;
+        if (tag ==='') {tag = 'default'};
+        const response = await fetch(`${host}/api/notes/updatenote/${_id}`, {
             method: "PUT",
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': authToken,
             },
             body: JSON.stringify({ title, description, tag })
-        });
+        }
+        );
+        let newNote = JSON.parse(JSON.stringify(notes));
+        // logic to edit Note on Client Side
+        for (let index = 0; index < newNote.length; index++) {
+            const ele = newNote[index];
+            if (ele._id === note._id) {
+                newNote[index].title = title;
+                newNote[index].description = description;
+                newNote[index].tag = tag;
+                break;
+            }
+        }
 
-        console.log(response)
+        setNotes(newNote)
+        console.log(await response.json())
     }
-
 
 
     // * * * Delete a Note [Done]

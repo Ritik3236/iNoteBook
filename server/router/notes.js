@@ -63,7 +63,7 @@ router.put('/updatenote/:id', fetchUser,
                 newNote.description = description;
                 newNote.tag = tag;
             }
-            let note = await Notes.findById(req.params.id)
+            let note = await Notes.findById(req.params.id);
 
             if (!note) { return res.status(401).send("Not Found"); }
             if (note.user_id.toString() !== req.user.id) { return res.status(401).send("Not Allowed"); }
