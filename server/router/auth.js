@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
     res.json(req.body);
 })
 
+let success = false
 // ! ROUTE 1 :
 // ? Create a new user using api/Auth/signup Api, No login Required.
 router.post('/signup',
@@ -27,9 +28,9 @@ router.post('/signup',
         }
         try {
             // Check if user with same Email already exists.
-            let user = await User.findOne({ email: req.body.email });
+            let user = await User.findOne({ email: req.body.email.toLowerCase() });
             if (user) {
-                return res.status(403).send("Sorry a user with this Email is already exists")
+                return res.status(403).send({ message: "Sorry a user with this Email is already exists" })
             };
             // Create a new user.
             const salt = await bcryptjs.genSalt(5);
@@ -37,7 +38,7 @@ router.post('/signup',
             const secPass = await bcryptjs.hash(req.body.password, salt);
             user = await User.create({
                 name: req.body.name,
-                email: req.body.email,
+                email: req.body.email.toLowerCase(),
                 password: secPass,
             })
             const data = { user: { id: user.id } };
@@ -45,7 +46,7 @@ router.post('/signup',
             res.status(201).send({ user: user, authToken: authToken });
         } catch (err) {
             console.log(err);
-            res.status(500).send('Some Error Occurred');
+            res.status(500).send({ message: 'Some Error Occurred' });
         }
     })
 
@@ -66,22 +67,23 @@ router.post('/login',
         try {
             const { email, password } = req.body;
             // Check if user with given Email  exists.
-            let user = await User.findOne({ email: email });
+            let user = await User.findOne({ email: email.toLowerCase() });
             if (!user) {
-                return res.status(403).send("Plz try to login with correct credential");
+                return res.status(403).send({ success: false, message: "Plz try to login with correct credential" });
             };
             // if exists then validate passwords
             const passCompare = await bcryptjs.compare(password, user.password)
             if (!passCompare) {
-                return res.status(403).send("Plz try to login with correct credential");
+                return res.status(403).send({ message: "Plz try to login with correct credential" });
             }
             // generating JWT and sending
             const data = { user: { id: user.id } }
             const authToken = jwt.sign(data, process.env.JWT_SECRET_KEY);
-            res.status(200).send({ user: user, authToken: authToken });
+            // ! have to remove user from field
+            res.status(200).send({ success: true, user: user, authToken: authToken });
         } catch (err) {
             console.log(err)
-            res.status(500).send('Some Error Occurred')
+            res.status(500).send({ message: 'Some Error Occurred' })
         }
     })
 
@@ -94,7 +96,7 @@ router.post('/getuser', fetchUser, async (req, res) => {
         res.status(200).send({ user: user });
     } catch (err) {
         console.log(err)
-        res.status(500).send('Some Error Occurred')
+        res.status(500).send({ message: 'Some Error Occurred' })
     }
 })
 

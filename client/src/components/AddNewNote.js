@@ -26,11 +26,11 @@ const AddNewNote = () => {
                 <form className="my-3">
                     <div className="mb-3">
                         <label htmlFor="title" className="form-label">Title</label>
-                        <input type="text" name="title" className="form-control" id="title" value={note.title} onChange={onChange} />
+                        <input placeholder="Min 5 word" type="text" name="title" className="form-control" id="title" value={note.title} onChange={onChange} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="description" className="form-label">Description</label>
-                        <input type="text" className="form-control" name="description" id="description" value={note.description} onChange={onChange} />
+                        <input placeholder="Min 5 word" type="text" className="form-control" name="description" id="description" value={note.description} onChange={onChange} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="tag" className="form-label">Tag</label>

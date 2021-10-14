@@ -3,11 +3,13 @@ import { useState } from 'react'
 
 const NoteState = (props) => {
     const host = "http://localhost:5000";
-    const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE2MDJjYTkzMzQzMmUxNTBlYjE0Yjg0In0sImlhdCI6MTYzMzY5Mjg2Mn0.quWsLMG8zcdWNFLPePuHMt2cQ_OLSieyCWf0PoVxXXA';
+    const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE2NzEzZWU2YzEyNzE3Y2JlN2FlMmVlIn0sImlhdCI6MTYzNDE0NTMwMn0.Olkd-jM_DWqpL2zfWNIzmBbtjXutm8AtoobySId9b3A';
     const [notes, setNotes] = useState([]);
 
     // * * * Fetching all notes [Done]
     const fetchAllNotes = async () => {
+
+        // Fetch : 'API CALL'
         const response = await fetch(`${host}/api/notes/fetchallnotes`, {
             method: "GET",
             headers: { 'auth-token': authToken, }
@@ -18,7 +20,9 @@ const NoteState = (props) => {
 
     // * * * Add a Note [Done]
     const addNote = async (title, description, tag) => {
-        if (tag ==='') {tag = 'default'};
+
+        // Add : 'API CALL'
+        if (tag === '') { tag = 'default' };
         const response = await fetch(`${host}/api/notes/addnote`, {
             method: "POST",
             headers: {
@@ -32,12 +36,12 @@ const NoteState = (props) => {
         setNotes(notes.concat(note.newNote))
     }
 
-    // * * * Edit a Note
+    // * * * Edit a Note [Done]
     const editNote = async (note) => {
 
-         // Update : 'API CALL'
+        // Update : 'API CALL'
         let { _id, description, tag, title, } = note;
-        if (tag ==='') {tag = 'default'};
+        if (tag === '') { tag = 'default' };
         const response = await fetch(`${host}/api/notes/updatenote/${_id}`, {
             method: "PUT",
             headers: {

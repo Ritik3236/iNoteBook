@@ -33,17 +33,25 @@ const Notes = () => {
         refClose.current.click();
     }
     const noteProps = { note, onChange, onSubmit, updateNote, refClose, refEdit }
-    return (
-        <>
-            <Modal noteProps={noteProps} />
-            <div className="my-3 container">
-                <div className="row">
-                    <h2> Your Notes</h2>
-                    {notes.map(notes => { return (<NoteItem key={notes._id} notes={notes} updateNote={updateNote} />) })}
+
+    if (notes.length > 0) {
+        return (
+            <>
+                <Modal noteProps={noteProps} />
+                <div className="my-3 container">
+                    <div className="row">
+                        <h2> Your Notes</h2>
+                        {notes.map(notes => { return (<NoteItem key={notes._id} notes={notes} updateNote={updateNote} />) })}
+                    </div>
                 </div>
-            </div>
-        </>
-    )
+            </>
+        )
+    }
+    else {
+        return (
+            <> <div className="container">No Notes Found</div> </>
+        )
+    }
 }
 
 export default Notes

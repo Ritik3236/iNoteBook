@@ -1,8 +1,10 @@
 import './App.css';
 import React from "react";
 import Home from './components/Home';
-import Navbar from './components/Navbar';
 import About from './components/About';
+import Login from './components/Login';
+import Navbar from './components/Navbar';
+import Signup from './components/Signup';
 import NoteState from './context/notes/NoteState';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
@@ -22,6 +24,12 @@ function App() {
               </Route>
               <Route exact path="/about">
                 <About />
+              </Route>
+              <Route exact path="/signup">
+                <Signup />
+              </Route>
+              <Route exact path="/login">
+                <Login />
               </Route>
             </Switch>
           </div>

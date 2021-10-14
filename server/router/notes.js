@@ -14,7 +14,7 @@ router.post('/addnote', fetchUser,
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ message: errors.array() });
         }
         try {
             const { title, description, tag } = req.body
@@ -24,7 +24,7 @@ router.post('/addnote', fetchUser,
             res.status(201).send({ newNote: newNote });
         } catch (err) {
             console.log(err)
-            res.status(500).send({ error: 'Internal Error Occurred' })
+            res.status(500).send({ message: 'Internal Error Occurred' })
         }
     })
 
@@ -37,7 +37,7 @@ router.get('/fetchallnotes', fetchUser, async (req, res) => {
         res.status(200).send({ allNotes });
     } catch (err) {
         console.log(err)
-        res.status(500).send({ error: 'Internal Error Occurred' })
+        res.status(500).send({ message: 'Internal Error Occurred' })
     }
 })
 
@@ -53,7 +53,7 @@ router.put('/updatenote/:id', fetchUser,
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ message: errors.array() });
         }
         try {
             const { title, description, tag } = req.body
@@ -66,17 +66,17 @@ router.put('/updatenote/:id', fetchUser,
             let note = await Notes.findById(req.params.id);
 
             if (!note) { return res.status(401).send("Not Found"); }
-            if (note.user_id.toString() !== req.user.id) { return res.status(401).send("Not Allowed"); }
+            if (note.user_id.toString() !== req.user.id) { return res.status(401).send({ message: "Not Allowed" }); }
 
             note = await Notes.findByIdAndUpdate(req.params.id, { $set: newNote }, { new: true })
             res.status(201).send(note);
 
         } catch (err) {
             console.log(err)
-            res.status(500).send({ error: 'Internal Error Occurred' })
+            res.status(500).send({ message: 'Internal Error Occurred' })
         }
     })
-    
+
 //! ROUTE 4 :
 // ? Delete Notes  using DELETE :  api/notes/deleteNote, login Required.
 router.delete('/deletenote/:id', fetchUser, async (req, res) => {
@@ -85,14 +85,14 @@ router.delete('/deletenote/:id', fetchUser, async (req, res) => {
         let note = await Notes.findById(req.params.id);
 
         if (!note) { return res.status(401).send("Not Found"); }
-        if (note.user_id.toString() !== req.user.id) { return res.status(401).send("Not Allowed"); }
+        if (note.user_id.toString() !== req.user.id) { return res.status(401).send({ message: "Not Allowed" }); }
 
         await Notes.findByIdAndDelete(req.params.id);
-        res.status(202).send("Note has been Deleted",)
+        res.status(202).send({ message: "Note has been Deleted" },)
 
     } catch (err) {
         console.log(err)
-        res.status(500).send({ error: "Internal Error Occurred" })
+        res.status(500).send({ message: "Internal Error Occurred" })
     }
 })
 
