@@ -23,7 +23,7 @@ const Login = () => {
             localStorage.setItem('authToken', loginData.authToken);
             History.push('/home')
         }
-        else { alert("Login failed") }
+        else { alert(`Login failed  ${loginData.message}`) }
     }
 
     return (

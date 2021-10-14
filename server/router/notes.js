@@ -34,7 +34,7 @@ router.get('/fetchallnotes', fetchUser, async (req, res) => {
 
     try {
         allNotes = await Notes.find({ user_id: req.user.id });
-        res.status(200).send({ allNotes });
+        res.status(200).send({ success: true, allNotes });
     } catch (err) {
         console.log(err)
         res.status(500).send({ message: 'Internal Error Occurred' })

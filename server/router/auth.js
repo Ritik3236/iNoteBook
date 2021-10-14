@@ -24,7 +24,7 @@ router.post('/signup',
         // If there is any Validation error, abort the request.
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
+            return res.status(400).json({ success, message: errors.array() });
         }
         try {
             // Check if user with same Email already exists.
@@ -43,10 +43,12 @@ router.post('/signup',
             })
             const data = { user: { id: user.id } };
             const authToken = jwt.sign(data, process.env.JWT_SECRET_KEY);
-            res.status(201).send({ user: user, authToken: authToken });
+
+            // ! have to remove user from response
+            res.status(201).send({ success: true, user: user, authToken: authToken });
         } catch (err) {
             console.log(err);
-            res.status(500).send({ message: 'Some Error Occurred' });
+            res.status(500).send({ success: false, message: 'Some Error Occurred' });
         }
     })
 
@@ -74,7 +76,7 @@ router.post('/login',
             // if exists then validate passwords
             const passCompare = await bcryptjs.compare(password, user.password)
             if (!passCompare) {
-                return res.status(403).send({ message: "Plz try to login with correct credential" });
+                return res.status(403).send({ success: false, message: "Plz try to login with correct credential" });
             }
             // generating JWT and sending
             const data = { user: { id: user.id } }

@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 const NoteState = (props) => {
     const host = "http://localhost:5000";
-    const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjE2NzEzZWU2YzEyNzE3Y2JlN2FlMmVlIn0sImlhdCI6MTYzNDE0NTMwMn0.Olkd-jM_DWqpL2zfWNIzmBbtjXutm8AtoobySId9b3A';
+    const authToken = localStorage.getItem("authToken");
     const [notes, setNotes] = useState([]);
 
     // * * * Fetching all notes [Done]
@@ -14,8 +14,10 @@ const NoteState = (props) => {
             method: "GET",
             headers: { 'auth-token': authToken, }
         })
-        const noteData = await response.json()
-        setNotes(noteData.allNotes)
+        const noteData = await response.json();
+        console.log(noteData)
+        noteData.success ? setNotes(noteData.allNotes) : props.showAlert('danger', noteData.message);
+        console.log(noteData)
     }
 
     // * * * Add a Note [Done]
